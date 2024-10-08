@@ -8,13 +8,13 @@
         body {
             font-family: Arial, sans-serif;
         }
-        
+
         .datepicker {
             position: relative;
             width: 250px;
             margin: 50px auto;
         }
-        
+
         input {
             width: 100%;
             padding: 10px;
@@ -24,7 +24,7 @@
             cursor: pointer;
             font-size: 16px;
         }
-        
+
         .calendar {
             display: none;
             position: absolute;
@@ -38,44 +38,44 @@
             z-index: 10;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
-        
+
         .calendar table {
             width: 100%;
             text-align: center;
             border-collapse: collapse;
         }
-        
+
         .calendar table td {
             padding: 10px;
             cursor: pointer;
             border-radius: 50%;
             transition: background-color 0.3s ease;
         }
-        
+
         .calendar table td.selected {
             background-color: #4caf50;
             color: white;
             border-radius: 50%;
         }
-        
+
         .calendar table td:hover {
             background-color: #f0f0f0;
             border-radius: 50%;
         }
-        
+
         .calendar table th {
             padding: 5px;
             font-weight: bold;
             color: #333;
         }
-        
+
         .calendar .month-navigation {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
         }
-        
+
         .calendar .month-navigation button {
             border: none;
             background-color: #4caf50;
@@ -85,40 +85,57 @@
             cursor: pointer;
             font-size: 16px;
         }
-        
+
         .calendar .month-navigation button:hover {
             background-color: #45a049;
         }
-        
+
         .calendar .days-header th {
             padding: 8px 0;
             color: #555;
             font-weight: bold;
             font-size: 14px;
         }
-        
+
         .calendar table td {
             width: 40px;
             height: 40px;
             font-size: 16px;
             color: #333;
         }
-        
+
         .calendar table td.disabled {
             color: #ccc;
             cursor: not-allowed;
         }
-        
+
         .calendar table td.selected:hover {
             background-color: #45a049; /* Darker shade when hovering on selected */
         }
-        
+
+        /* Style for the refresh button */
+        .refresh-button {
+            display: block;
+            margin: 10px auto;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .refresh-button:hover {
+            background-color: #d32f2f;
+        }
     </style>
 </head>
 <body>
     <div class="datepicker">
         <input type="text" id="selected-dates" placeholder="Select Dates" readonly>
         <div class="calendar" id="calendar"></div>
+        <button class="refresh-button" id="refresh">Refresh</button>
     </div>
 
     <script>
@@ -130,6 +147,7 @@
 
         const calendar = document.getElementById("calendar");
         const dateInput = document.getElementById("selected-dates");
+        const refreshButton = document.getElementById("refresh");
 
         // Show/hide calendar on input click
         dateInput.addEventListener('click', () => {
@@ -302,6 +320,14 @@
             currentDate.setMonth(currentDate.getMonth() + offset);
             generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
         }
+
+        // Refresh function to clear selections and reset calendar to current month
+        refreshButton.addEventListener('click', () => {
+            selectedDates = []; // Clear selected dates
+            currentDate = new Date(); // Reset current date to today
+            dateInput.value = ''; // Clear the input field
+            generateCalendar(currentDate.getFullYear(), currentDate.getMonth()); // Regenerate the calendar
+        });
 
         // Initialize the calendar for the current month
         generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
