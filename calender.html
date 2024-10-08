@@ -8,21 +8,23 @@
         body {
             font-family: Arial, sans-serif;
         }
-
+        
         .datepicker {
             position: relative;
             width: 250px;
             margin: 50px auto;
         }
-
+        
         input {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 2px solid #333;
+            border-radius: 10px;
             text-align: center;
+            cursor: pointer;
+            font-size: 16px;
         }
-
+        
         .calendar {
             display: none;
             position: absolute;
@@ -31,59 +33,86 @@
             width: 100%;
             background: white;
             border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 5px;
+            border-radius: 10px;
+            padding: 15px;
             z-index: 10;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
-
+        
         .calendar table {
             width: 100%;
             text-align: center;
+            border-collapse: collapse;
         }
-
+        
         .calendar table td {
             padding: 10px;
             cursor: pointer;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
         }
-
+        
         .calendar table td.selected {
             background-color: #4caf50;
             color: white;
             border-radius: 50%;
         }
-
+        
         .calendar table td:hover {
             background-color: #f0f0f0;
             border-radius: 50%;
         }
-
+        
         .calendar table th {
             padding: 5px;
-            background-color: #f9f9f9;
+            font-weight: bold;
+            color: #333;
         }
-
+        
         .calendar .month-navigation {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
         }
-
+        
         .calendar .month-navigation button {
             border: none;
             background-color: #4caf50;
             color: white;
-            padding: 5px 10px;
-            border-radius: 3px;
+            padding: 5px 15px;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
         }
-
+        
         .calendar .month-navigation button:hover {
             background-color: #45a049;
         }
-
-        .calendar .days-header {
+        
+        .calendar .days-header th {
+            padding: 8px 0;
+            color: #555;
             font-weight: bold;
+            font-size: 14px;
         }
+        
+        .calendar table td {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .calendar table td.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .calendar table td.selected:hover {
+            background-color: #45a049; /* Darker shade when hovering on selected */
+        }
+        
     </style>
 </head>
 <body>
