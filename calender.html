@@ -1,361 +1,724 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Multi-Select Date Picker</title>
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
 
-        .datepicker {
+        /* General styling for the date picker component */
+
+        .datepicker-container {
+
             position: relative;
-            width: 250px;
+
+            width: 260px;
+
             margin: 50px auto;
+
+            font-family: Arial, sans-serif;
+
         }
 
-        input {
+
+
+        .datepicker-input {
+
             width: 100%;
-            padding: 10px;
+
+            padding: 12px;
+
             border: 2px solid #333;
-            border-radius: 10px;
+
+            border-radius: 8px;
+
             text-align: center;
+
             cursor: pointer;
+
             font-size: 16px;
+
+            background-color: #fff;
+
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+
         }
 
-        .calendar {
+
+
+        /* Styling for the calendar dropdown */
+
+        .datepicker-calendar {
+
             display: none;
+
             position: absolute;
-            top: 100%;
+
+            top: 105%;
+
             left: 0;
+
             width: 100%;
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 10px;
+
+            background-color: #fff;
+
+            border: 1px solid #ddd;
+
+            border-radius: 8px;
+
             padding: 15px;
+
             z-index: 10;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+
         }
 
-        .calendar table {
+
+
+        .datepicker-calendar table {
+
             width: 100%;
-            text-align: center;
+
             border-collapse: collapse;
+
+            text-align: center;
+
         }
 
-        .calendar table td {
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 50%;
-            transition: background-color 0.3s ease;
-        }
 
-        .calendar table td.selected {
-            background-color: #4caf50;
-            color: white;
-            border-radius: 50%;
-        }
 
-        .calendar table td:hover {
-            background-color: #f0f0f0;
-            border-radius: 50%;
-        }
+        .datepicker-calendar th {
 
-        .calendar table th {
-            padding: 5px;
+            padding: 8px;
+
             font-weight: bold;
-            color: #333;
-        }
 
-        .calendar .month-navigation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .calendar .month-navigation button {
-            border: none;
-            background-color: #4caf50;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .calendar .month-navigation button:hover {
-            background-color: #45a049;
-        }
-
-        .calendar .days-header th {
-            padding: 8px 0;
             color: #555;
-            font-weight: bold;
-            font-size: 14px;
+
         }
 
-        .calendar table td {
-            width: 40px;
-            height: 40px;
-            font-size: 16px;
-            color: #333;
-        }
 
-        .calendar table td.disabled {
-            color: #ccc;
-            cursor: not-allowed;
-        }
 
-        .calendar table td.selected:hover {
-            background-color: #45a049; /* Darker shade when hovering on selected */
-        }
+        .datepicker-calendar td {
 
-        /* Style for the refresh and OK buttons */
-        .button {
-            display: block;
-            margin: 10px auto;
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 10px;
+
             cursor: pointer;
-            font-size: 16px;
-            width: 100px;
+
+            border-radius: 50%;
+
+            transition: background-color 0.2s ease;
+
         }
 
-        .button:hover {
-            background-color: #d32f2f;
+
+
+        .datepicker-calendar td:hover {
+
+            background-color: #f0f0f0;
+
         }
 
-        .ok-button {
+
+
+        .datepicker-calendar td.selected {
+
             background-color: #4caf50;
+
+            color: #fff;
+
         }
 
-        .ok-button:hover {
+
+
+        .datepicker-calendar td.selected:hover {
+
             background-color: #45a049;
+
         }
+
+
+
+        /* Navigation for the calendar months */
+
+        .datepicker-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 10px;
+
+        }
+
+
+
+        .datepicker-month-btn {
+
+            border: none;
+
+            background-color: #4caf50;
+
+            color: #fff;
+
+            padding: 5px 12px;
+
+            border-radius: 5px;
+
+            cursor: pointer;
+
+            font-size: 16px;
+
+            transition: background-color 0.2s ease;
+
+        }
+
+
+
+        .datepicker-month-btn:hover {
+
+            background-color: #45a049;
+
+        }
+
+
+
+        .datepicker-month-label {
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            color: #333;
+
+        }
+
+
+
+        /* Button styling for Refresh and OK buttons */
+
+        .datepicker-btn {
+
+            display: block;
+
+            margin: 10px auto;
+
+            width: 100px;
+
+            background-color: #f44336;
+
+            color: #fff;
+
+            border: none;
+
+            padding: 10px 0;
+
+            border-radius: 5px;
+
+            cursor: pointer;
+
+            font-size: 16px;
+
+            transition: background-color 0.2s ease;
+
+        }
+
+
+
+        .datepicker-btn:hover {
+
+            background-color: #d32f2f;
+
+        }
+
+
+
+        .datepicker-btn-ok {
+
+            background-color: #4caf50;
+
+        }
+
+
+
+        .datepicker-btn-ok:hover {
+
+            background-color: #45a049;
+
+        }
+
+
+
+        /* Additional day header styling */
+
+        .datepicker-days-header th {
+
+            padding: 8px 0;
+
+            color: #555;
+
+            font-size: 14px;
+
+        }
+
     </style>
+
 </head>
+
 <body>
-    <div class="datepicker">
-        <input type="text" id="selected-dates" placeholder="Select Dates" readonly>
-        <div class="calendar" id="calendar"></div>
-        <button class="button" id="refresh">Refresh</button>
-        <button class="button ok-button" id="ok">OK</button>
+
+    <div class="datepicker-container">
+
+        <input type="text" id="selected-dates" class="datepicker-input" placeholder="Select Dates" readonly>
+
+        
+
+        <div class="datepicker-calendar" id="calendar"></div>
+
+        
+
+        <button class="datepicker-btn" id="refresh">Refresh</button>
+
+        <button class="datepicker-btn datepicker-btn-ok" id="ok">OK</button>
+
     </div>
 
+
+
     <script>
+
         let currentDate = new Date();
+
         let selectedDates = [];
+
         let isDragging = false;
+
         let startDate = null;
+
         let endDate = null;
 
+
+
         const calendar = document.getElementById("calendar");
+
         const dateInput = document.getElementById("selected-dates");
+
         const refreshButton = document.getElementById("refresh");
+
         const okButton = document.getElementById("ok");
 
+
+
         // Show/hide calendar on input click
+
         dateInput.addEventListener('click', () => {
+
             calendar.style.display = calendar.style.display === 'none' || !calendar.style.display ? 'block' : 'none';
+
         });
 
+
+
         // Utility function to format dates as "MM/DD/YYYY"
+
         function formatDate(date) {
+
             return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+
         }
 
+
+
         // Utility function to generate calendar days
+
         function generateCalendar(year, month) {
+
             calendar.innerHTML = ''; // Clear previous calendar
+
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
             
+
             // Create month navigation
+
             const monthNavigation = document.createElement('div');
-            monthNavigation.classList.add('month-navigation');
+
+            monthNavigation.classList.add('datepicker-header');
+
+
 
             const prevButton = document.createElement('button');
+
             prevButton.textContent = '<';
+
+            prevButton.classList.add('datepicker-month-btn');
+
             prevButton.onclick = () => changeMonth(-1);
+
             
+
             const nextButton = document.createElement('button');
+
             nextButton.textContent = '>';
+
+            nextButton.classList.add('datepicker-month-btn');
+
             nextButton.onclick = () => changeMonth(1);
 
+
+
             const monthLabel = document.createElement('span');
+
             monthLabel.textContent = `${monthNames[month]} ${year}`;
 
+            monthLabel.classList.add('datepicker-month-label');
+
+
+
             monthNavigation.appendChild(prevButton);
+
             monthNavigation.appendChild(monthLabel);
+
             monthNavigation.appendChild(nextButton);
+
             calendar.appendChild(monthNavigation);
 
+
+
             // Create days of the week header
+
             const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
             const table = document.createElement('table');
+
             const headerRow = document.createElement('tr');
-            headerRow.classList.add('days-header');
+
+            headerRow.classList.add('datepicker-days-header');
+
+
 
             daysOfWeek.forEach(day => {
+
                 const th = document.createElement('th');
+
                 th.textContent = day;
+
                 headerRow.appendChild(th);
+
             });
+
+
 
             table.appendChild(headerRow);
 
+
+
             // Get first and last day of the month
+
             const firstDay = new Date(year, month, 1).getDay();
+
             const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+
+
             let dateRow = document.createElement('tr');
+
             let dayCount = 1;
 
+
+
             // Create empty cells for days before the first day of the month
+
             for (let i = 0; i < firstDay; i++) {
+
                 const emptyCell = document.createElement('td');
+
                 dateRow.appendChild(emptyCell);
+
             }
+
+
 
             // Create calendar cells for each day
+
             for (let i = firstDay; i < 7; i++) {
+
                 const dayCell = createDayCell(year, month, dayCount);
+
                 dateRow.appendChild(dayCell);
+
                 dayCount++;
+
             }
+
             table.appendChild(dateRow);
 
+
+
             // Continue creating rows until the month is filled
+
             while (dayCount <= daysInMonth) {
+
                 dateRow = document.createElement('tr');
+
                 for (let i = 0; i < 7 && dayCount <= daysInMonth; i++) {
+
                     const dayCell = createDayCell(year, month, dayCount);
+
                     dateRow.appendChild(dayCell);
+
                     dayCount++;
+
                 }
+
                 table.appendChild(dateRow);
+
             }
+
+
 
             calendar.appendChild(table);
+
         }
+
+
 
         // Create individual day cells
+
         function createDayCell(year, month, day) {
+
             const dayCell = document.createElement('td');
+
             const date = new Date(year, month, day);
+
             dayCell.textContent = day;
 
+
+
             // Check if the date is selected
+
             if (selectedDates.some(d => d.getTime() === date.getTime())) {
+
                 dayCell.classList.add('selected');
+
             }
+
+
 
             // Add mousedown event to start selecting
+
             dayCell.addEventListener('mousedown', (e) => {
+
                 isDragging = true;
+
                 startDate = date;
+
                 toggleDateSelection(date);
+
                 dayCell.classList.toggle('selected');
+
                 e.preventDefault();  // Prevents unwanted text selection
+
             });
+
+
 
             // Add mouseover event to continue selecting while dragging
+
             dayCell.addEventListener('mouseover', () => {
+
                 if (isDragging) {
+
                     endDate = date;
+
                     handleDateRangeSelection(startDate, endDate);
+
                 }
+
             });
+
+
 
             // Add mouseup event to stop selecting
+
             dayCell.addEventListener('mouseup', () => {
+
                 isDragging = false;
+
                 startDate = null;
+
                 endDate = null;
+
             });
+
+
 
             return dayCell;
+
         }
+
+
 
         // Toggle the date selection
+
         function toggleDateSelection(date) {
+
             const index = selectedDates.findIndex(d => d.getTime() === date.getTime());
 
+
+
             if (index >= 0) {
+
                 selectedDates.splice(index, 1);
+
             } else {
+
                 selectedDates.push(date);
+
             }
 
+
+
             // Update the input field with the selected dates
+
             dateInput.value = selectedDates.map(d => formatDate(d)).join(', ');
+
         }
+
+
 
         // Handle selection of a date range
+
         function handleDateRangeSelection(start, end) {
+
             selectedDates = [];  // Clear current selection
 
+
+
             // Ensure start is before end
+
             if (start > end) {
+
                 [start, end] = [end, start];
+
             }
+
+
 
             const cells = document.querySelectorAll('td');
+
             cells.forEach(cell => {
+
                 const cellDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(cell.textContent));
 
+
+
                 if (cellDate >= start && cellDate <= end) {
+
                     if (!cell.classList.contains('selected')) {
+
                         cell.classList.add('selected');
+
                     }
+
+
 
                     if (!selectedDates.some(d => d.getTime() === cellDate.getTime())) {
+
                         selectedDates.push(cellDate);
+
                     }
+
                 } else {
+
                     cell.classList.remove('selected');
+
                 }
+
             });
 
+
+
             // Update the input field with the selected dates
+
             dateInput.value = selectedDates.map(d => formatDate(d)).join(', ');
+
         }
+
+
 
         // Change the month view
+
         function changeMonth(offset) {
+
             currentDate.setMonth(currentDate.getMonth() + offset);
+
             generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
+
         }
 
+
+
         // Refresh function to clear selections and reset calendar to current month
+
         refreshButton.addEventListener('click', () => {
+
             selectedDates = []; // Clear selected dates
+
             currentDate = new Date(); // Reset current date to today
+
             dateInput.value = ''; // Clear the input field
+
             generateCalendar(currentDate.getFullYear(), currentDate.getMonth()); // Regenerate the calendar
+
         });
+
+
 
         // OK button click to alert selected dates
+
         okButton.addEventListener('click', () => {
+
             if (selectedDates.length > 0) {
+
                 alert("Selected Dates: " + selectedDates.map(d => formatDate(d)).join(', '));
+
             } else {
+
                 alert("No dates selected");
+
             }
+
         });
+
+
 
         // Initialize the calendar for the current month
+
         generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
 
+
+
         // Detect global mouseup to stop dragging outside the calendar
+
         document.addEventListener('mouseup', () => {
+
             isDragging = false;
+
         });
+
     </script>
+
 </body>
+
 </html>
+
