@@ -113,8 +113,8 @@
             background-color: #45a049; /* Darker shade when hovering on selected */
         }
 
-        /* Style for the refresh button */
-        .refresh-button {
+        /* Style for the refresh and OK buttons */
+        .button {
             display: block;
             margin: 10px auto;
             background-color: #f44336;
@@ -124,10 +124,19 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            width: 100px;
         }
 
-        .refresh-button:hover {
+        .button:hover {
             background-color: #d32f2f;
+        }
+
+        .ok-button {
+            background-color: #4caf50;
+        }
+
+        .ok-button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -135,7 +144,8 @@
     <div class="datepicker">
         <input type="text" id="selected-dates" placeholder="Select Dates" readonly>
         <div class="calendar" id="calendar"></div>
-        <button class="refresh-button" id="refresh">Refresh</button>
+        <button class="button" id="refresh">Refresh</button>
+        <button class="button ok-button" id="ok">OK</button>
     </div>
 
     <script>
@@ -148,6 +158,7 @@
         const calendar = document.getElementById("calendar");
         const dateInput = document.getElementById("selected-dates");
         const refreshButton = document.getElementById("refresh");
+        const okButton = document.getElementById("ok");
 
         // Show/hide calendar on input click
         dateInput.addEventListener('click', () => {
@@ -327,6 +338,15 @@
             currentDate = new Date(); // Reset current date to today
             dateInput.value = ''; // Clear the input field
             generateCalendar(currentDate.getFullYear(), currentDate.getMonth()); // Regenerate the calendar
+        });
+
+        // OK button click to alert selected dates
+        okButton.addEventListener('click', () => {
+            if (selectedDates.length > 0) {
+                alert("Selected Dates: " + selectedDates.map(d => formatDate(d)).join(', '));
+            } else {
+                alert("No dates selected");
+            }
         });
 
         // Initialize the calendar for the current month
