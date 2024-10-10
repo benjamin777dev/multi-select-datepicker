@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +8,7 @@
         /* General styling for the date picker component */
         .datepicker-container {
             position: relative;
-            width: 260px;
+            width: 280px;
             margin: 50px auto;
             font-family: Arial, sans-serif;
         }
@@ -17,8 +16,8 @@
         .datepicker-input {
             width: 100%;
             padding: 12px;
-            border: 2px solid #333;
-            border-radius: 8px;
+            border: 1px solid #999;
+            border-radius: 5px;
             text-align: center;
             cursor: pointer;
             font-size: 16px;
@@ -30,79 +29,130 @@
         .datepicker-calendar {
             display: none;
             position: absolute;
-            top: 105%;
+            top: 110%;
             left: 0;
             width: 100%;
             background-color: #fff;
             border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
+            border-radius: 5px;
+            padding: 5px;
             z-index: 10;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .datepicker-calendar table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-        }
-
-        .datepicker-calendar th {
-            padding: 8px;
-            font-weight: bold;
-            color: #555;
-        }
-
-        .datepicker-calendar td {
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 50%;
-            transition: background-color 0.2s ease;
-        }
-
-        .datepicker-calendar td:hover {
-            background-color: #f0f0f0;
-        }
-
-        .datepicker-calendar td.selected {
-            background-color: #4caf50;
-            color: #fff;
-        }
-
-        .datepicker-calendar td.selected:hover {
-            background-color: #45a049;
-        }
-
-        /* Navigation for the calendar months */
+        /* Month navigation header */
         .datepicker-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            padding: 5px;
+            background-color: #f7f7f7;
+            border-radius: 5px;
+            margin-bottom: 5px;
         }
 
         .datepicker-month-btn {
             border: none;
-            background-color: #4caf50;
-            color: #fff;
-            padding: 5px 12px;
-            border-radius: 5px;
+            background-color: transparent;
+            font-size: 18px;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.2s ease;
+            color: #333;
+            font-weight: bold;
+            width: 25px;
+            height: 25px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .datepicker-month-btn:hover {
-            background-color: #45a049;
+            background-color: #eaeaea;
+            border-radius: 50%;
         }
 
         .datepicker-month-label {
             font-size: 16px;
             font-weight: bold;
             color: #333;
+            flex-grow: 1;
+            text-align: center;
         }
 
-        /* Button styling for Refresh and OK buttons */
+        .datepicker-close-btn {
+            font-size: 16px;
+            color: red;
+            cursor: pointer;
+            font-weight: bold;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 25px;
+            height: 25px;
+            padding: 0 10px;
+        }
+
+        .datepicker-close-btn:hover {
+            background-color: #ffe6e6;
+            border-radius: 50%;
+        }
+
+        /* Styling for the calendar table */
+        .datepicker-calendar table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 2px; /* Add 2px margin between the cells */
+            text-align: center;
+        }
+
+        .datepicker-calendar th, .datepicker-calendar td {
+            width: 35px;
+            height: 13px;
+            font-size: 0.95rem;
+            text-align: right;
+        }
+
+        .datepicker-calendar th {
+            padding: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .datepicker-calendar td {
+            padding: 5px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            border-radius: 2px;
+        }
+
+        /* Selected day styling */
+        .datepicker-calendar td.selected {
+            background-color: #007bff;
+            color: white;
+            border: 1px solid #0056b3;
+        }
+
+        .datepicker-calendar td:hover {
+            background-color: #f0f0f0;
+        }
+
+        .datepicker-calendar td.selected:hover {
+            background-color: #0056b3;
+        }
+
+        /* Additional day header styling */
+        .datepicker-days-header th {
+            padding: 8px 0;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .datepicker-calendar td.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Button styling */
         .datepicker-btn {
             display: block;
             margin: 10px auto;
@@ -128,22 +178,22 @@
         .datepicker-btn-ok:hover {
             background-color: #45a049;
         }
-
-        /* Additional day header styling */
-        .datepicker-days-header th {
-            padding: 8px 0;
-            color: #555;
-            font-size: 14px;
-        }
     </style>
 </head>
-
 <body>
     <div class="datepicker-container">
         <input type="text" id="selected-dates" class="datepicker-input" placeholder="Select Dates" readonly>
-
-        <div class="datepicker-calendar" id="calendar"></div>
-
+        
+        <div class="datepicker-calendar" id="calendar">
+            <div class="datepicker-header">
+                <button class="datepicker-month-btn" id="prev-month">◀</button>
+                <span class="datepicker-month-label" id="month-label">October 2024</span>
+                <span class="datepicker-close-btn" id="close-calendar">X</span>
+                <button class="datepicker-month-btn" id="next-month">▶</button>
+            </div>
+            <!-- Calendar days will be dynamically injected here -->
+        </div>
+        
         <button class="datepicker-btn" id="refresh">Refresh</button>
         <button class="datepicker-btn datepicker-btn-ok" id="ok">OK</button>
     </div>
@@ -159,10 +209,16 @@
         const dateInput = document.getElementById("selected-dates");
         const refreshButton = document.getElementById("refresh");
         const okButton = document.getElementById("ok");
+        const closeCalendarButton = document.getElementById("close-calendar");
 
         // Show/hide calendar on input click
         dateInput.addEventListener('click', () => {
             calendar.style.display = calendar.style.display === 'none' || !calendar.style.display ? 'block' : 'none';
+        });
+
+        // Close the calendar
+        closeCalendarButton.addEventListener('click', () => {
+            calendar.style.display = 'none';
         });
 
         // Utility function to format dates as "MM/DD/YYYY"
@@ -174,18 +230,18 @@
         function generateCalendar(year, month) {
             calendar.innerHTML = ''; // Clear previous calendar
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
+            
             // Create month navigation
             const monthNavigation = document.createElement('div');
             monthNavigation.classList.add('datepicker-header');
 
             const prevButton = document.createElement('button');
-            prevButton.textContent = '<';
+            prevButton.textContent = '◀';
             prevButton.classList.add('datepicker-month-btn');
             prevButton.onclick = () => changeMonth(-1);
-
+            
             const nextButton = document.createElement('button');
-            nextButton.textContent = '>';
+            nextButton.textContent = '▶';
             nextButton.classList.add('datepicker-month-btn');
             nextButton.onclick = () => changeMonth(1);
 
@@ -193,13 +249,19 @@
             monthLabel.textContent = `${monthNames[month]} ${year}`;
             monthLabel.classList.add('datepicker-month-label');
 
+            const closeButton = document.createElement('span');
+            closeButton.textContent = 'X';
+            closeButton.classList.add('datepicker-close-btn');
+            closeButton.onclick = () => calendar.style.display = 'none';
+
             monthNavigation.appendChild(prevButton);
             monthNavigation.appendChild(monthLabel);
+            monthNavigation.appendChild(closeButton);
             monthNavigation.appendChild(nextButton);
             calendar.appendChild(monthNavigation);
 
             // Create days of the week header
-            const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
             const table = document.createElement('table');
             const headerRow = document.createElement('tr');
             headerRow.classList.add('datepicker-days-header');
@@ -219,9 +281,10 @@
             let dateRow = document.createElement('tr');
             let dayCount = 1;
 
-            // Create empty cells for days before the first day of the month
+            // Create hidden cells for days before the first day of the month
             for (let i = 0; i < firstDay; i++) {
                 const emptyCell = document.createElement('td');
+                emptyCell.style.visibility = 'hidden'; // Hide the empty cells
                 dateRow.appendChild(emptyCell);
             }
 
@@ -361,5 +424,4 @@
         });
     </script>
 </body>
-
 </html>
